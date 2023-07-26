@@ -1,0 +1,19 @@
+<div class="title">
+    <h1>Your Pet</h1>
+</div>
+<app-spinner *ngIf="loading"></app-spinner>
+<div *ngIf="pet != null" class="container">
+    <mat-card class="card">
+        <mat-card-title> {{pet.name}} </mat-card-title>
+        <mat-card-content>
+            <p><strong>Breed: </strong> {{pet.breed}}</p>
+            <p><strong>Age: </strong> {{pet.age}}</p>
+            <p><strong>Color: </strong> {{pet.color}}</p>
+            <p><strong>Weight: </strong> {{pet.weight}} Kg</p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="accent" routerLink="/petlist">Go Back</button>
+        </mat-card-actions>
+    </mat-card>
+    
+</div>
