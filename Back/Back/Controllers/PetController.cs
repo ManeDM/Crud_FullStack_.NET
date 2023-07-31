@@ -99,7 +99,40 @@ namespace Back.Controllers
 
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, Pet pet)
+        {
+            try
+            {
+                if(id != pet.Id) 
+                {
+                    return BadRequest();
+                }
 
+                var petValue = await _context.Pets.FindAsync(id);
+
+                if(petValue == null)
+                {
+                    return NotFound();
+                }
+                 
+                petValue.Name = pet.Name;
+                petValue.Age = pet.Age;
+                petValue.Breed = pet.Breed;
+                petValue.Color = pet.Color;
+                petValue.Weight = pet.Weight;
+
+                await _context.SaveChangesAsync();
+
+                return NotFound();
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
-  
+
+      
 }
