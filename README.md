@@ -36,6 +36,6 @@ Ejecuta las migraciones para crear la base de datos:
 
 ## Compilar y Ejecutar.
 
-Del lado del servidor abre el proyecto en tu  Microdoft Visual Studio y ejecutalo en el modo Debug, puedes interactuar con la API llendo a la siguiente ruta: https://localhost:7134/swagger/index.html.
+Del lado del servidor abre el proyecto en tu  Microsoft Visual Studio y ejecutalo en el modo Debug, puedes interactuar con la API yendo a la siguiente ruta: https://localhost:7134/swagger/index.html.
 
-Del lado del Frontend, abre una terminal, dirijete a la carpeta que contiene el proyecto Angular y ejecuta el comando ng serve, luego nevega hasta la siguiente ruta: http://localhost:4200/petlist
+Del lado del Frontend, abre una terminal, dirígete a la carpeta que contiene el proyecto Angular y ejecuta el comando ng serve, luego navega hasta la siguiente ruta: http://localhost:4200/petlist
