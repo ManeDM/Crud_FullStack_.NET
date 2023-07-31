@@ -14,6 +14,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options => options.AddPolicy("Allowwebapp",
     builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
+//AutoMapper
+builder.Services.AddAutoMapper(typeof(Program));
+
 //Add Context
 builder.Services.AddDbContext<AplicationDbContext>(options =>
 {

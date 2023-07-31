@@ -1,4 +1,6 @@
-﻿using Back.Models;
+﻿using AutoMapper;
+using Back.Models;
+using Back.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +13,12 @@ namespace Back.Controllers
     public class PetController : ControllerBase 
     {   
         private readonly AplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public PetController(AplicationDbContext context)
+        public PetController(AplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -23,7 +27,10 @@ namespace Back.Controllers
             try
             { 
                 var PetList = await _context.Pets.ToListAsync();
-                return Ok(PetList);
+
+                var PetListDTO = _mapper.Map<IEnumerable<PetDTO>>(PetList);
+
+                return Ok(PetListDTO);
 
             }
             catch (Exception ex)
@@ -47,7 +54,9 @@ namespace Back.Controllers
                     return NotFound(); 
                 }
 
-                return Ok(Pet);
+                var petDTO =   _mapper.Map<PetDTO>(Pet);
+
+                return Ok(petDTO);
             }
             catch (Exception ex)
             {
@@ -82,14 +91,19 @@ namespace Back.Controllers
 
         [HttpPost]
 
-        public async Task<IActionResult> Post(Pet pet)
+        public async Task<IActionResult> Post(PetDTO petDto)
         {
             try
             {
+                var pet = _mapper.Map<Pet>(petDto);
+
                 pet.CreationDate = DateTime.Now;
                 _context.Add(pet);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction("Get", new { id = pet.Id}, pet);
+
+                var petItemDto = _mapper.Map<PetDTO>(pet);
+
+                return CreatedAtAction("Get", new { id = pet.Id}, petItemDto);
             }
             catch (Exception ex)
             {
@@ -100,11 +114,13 @@ namespace Back.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Pet pet)
+        public async Task<IActionResult> Put(int id, PetDTO petDto)
         {
             try
             {
-                if(id != pet.Id) 
+                var pet = _mapper.Map<Pet>(petDto);
+
+                if (id != pet.Id) 
                 {
                     return BadRequest();
                 }
