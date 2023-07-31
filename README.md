@@ -1,6 +1,6 @@
 # CRUD de mascotas .NET CORE + ANGULAR + SQL SERVER
 
-El presente proyecto es un CRUD de mascotas utilizando las tecnologias  .NET y Angular, mediante el uso de patrones de diseño MVC y Pattern Repository en el Backend y del lado del Frontend utilizando angular se hace uso de Angular Material.
+El presente proyecto es un CRUD de mascotas utilizando las tecnologías  .NET y Angular, mediante el uso de patrones de diseño MVC y Pattern Repository en el Backend y del lado del Frontend utilizando angular implementando Angular Material.
 
 ## Requisitos para la ejecucion del proyecto.
 
