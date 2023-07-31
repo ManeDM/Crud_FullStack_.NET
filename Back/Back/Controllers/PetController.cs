@@ -124,7 +124,7 @@ namespace Back.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return NotFound();
+                return NoContent();
 
             }
             catch (Exception ex)

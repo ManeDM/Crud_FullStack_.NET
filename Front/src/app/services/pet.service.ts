@@ -29,5 +29,9 @@ export class PetService {
   addPet(pet: Pet): Observable<Pet>{
     return this.http.post<Pet>(`${this.MyappUrl}${this.MyApiUrl}`, pet);
   }
+
+  updatePet(id: number, pet: Pet): Observable<void>{
+    return this.http.put<void>(`${this.MyappUrl}${this.MyApiUrl}${id}`, pet);
+  }
 }
 
