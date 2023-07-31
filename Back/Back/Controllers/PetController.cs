@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Back.Models;
 using Back.Models.DTO;
+using Back.Models.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,13 +13,13 @@ namespace Back.Controllers
     [ApiController]
     public class PetController : ControllerBase 
     {   
-        private readonly AplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IPetRepository _petRepository; 
 
-        public PetController(AplicationDbContext context, IMapper mapper)
+        public PetController( IMapper mapper, IPetRepository petRepository)
         {
-            _context = context;
             _mapper = mapper;
+            _petRepository = petRepository;
         }
 
         [HttpGet]
@@ -26,7 +27,7 @@ namespace Back.Controllers
         {
             try
             { 
-                var PetList = await _context.Pets.ToListAsync();
+                var PetList = await _petRepository.GetPetList(); 
 
                 var PetListDTO = _mapper.Map<IEnumerable<PetDTO>>(PetList);
 
@@ -48,13 +49,13 @@ namespace Back.Controllers
         {
             try
             {
-                var Pet = await _context.Pets.FindAsync(id);
+                var Pet = await _petRepository.GetPet(id);
                 if (Pet == null)
                 {
-                    return NotFound(); 
+                    return NotFound();
                 }
 
-                var petDTO =   _mapper.Map<PetDTO>(Pet);
+                var petDTO = _mapper.Map<PetDTO>(Pet);
 
                 return Ok(petDTO);
             }
@@ -67,17 +68,17 @@ namespace Back.Controllers
 
         [HttpDelete("{id}")]
 
-        public async Task<IActionResult> Delete(int id) 
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var Pet = await _context.Pets.FindAsync(id);
-                if (Pet == null) 
+                var Pet = await _petRepository.GetPet(id);
+                if (Pet == null)
                 {
                     return NotFound();
                 }
-                _context.Pets.Remove(Pet);
-                await _context.SaveChangesAsync();
+
+                await _petRepository.DeletePet(Pet);
 
                 return NoContent();
             }
@@ -98,14 +99,14 @@ namespace Back.Controllers
                 var pet = _mapper.Map<Pet>(petDto);
 
                 pet.CreationDate = DateTime.Now;
-                _context.Add(pet);
-                await _context.SaveChangesAsync();
+                
+                pet = await _petRepository.AddPet(pet);
 
                 var petItemDto = _mapper.Map<PetDTO>(pet);
 
-                return CreatedAtAction("Get", new { id = pet.Id}, petItemDto);
+                return CreatedAtAction("Get", new { id = pet.Id }, petItemDto);
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
 
                 return BadRequest(ex.Message);
@@ -120,25 +121,19 @@ namespace Back.Controllers
             {
                 var pet = _mapper.Map<Pet>(petDto);
 
-                if (id != pet.Id) 
+                if (id != pet.Id)
                 {
                     return BadRequest();
                 }
 
-                var petValue = await _context.Pets.FindAsync(id);
+                var petValue = await _petRepository.GetPet(id);
 
-                if(petValue == null)
+                if (petValue == null)
                 {
                     return NotFound();
                 }
-                 
-                petValue.Name = pet.Name;
-                petValue.Age = pet.Age;
-                petValue.Breed = pet.Breed;
-                petValue.Color = pet.Color;
-                petValue.Weight = pet.Weight;
 
-                await _context.SaveChangesAsync();
+                await _petRepository.UpdatePet(pet);
 
                 return NoContent();
 
@@ -150,5 +145,5 @@ namespace Back.Controllers
         }
     }
 
-      
+
 }

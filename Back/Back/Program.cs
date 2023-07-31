@@ -1,4 +1,5 @@
 using Back.Models;
+using Back.Models.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,9 @@ builder.Services.AddCors(options => options.AddPolicy("Allowwebapp",
 
 //AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
+
+//Add Services
+builder.Services.AddScoped<IPetRepository, PetRepository>();
 
 //Add Context
 builder.Services.AddDbContext<AplicationDbContext>(options =>
